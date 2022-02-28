@@ -3,6 +3,7 @@
 
 <body>
   <h1>Vocabulary of English Speaking Children</h1>
+  <p>Age: <a id="clicks"></a></p>
   <style>
     h1 {
       color: #2ea44f;
@@ -15,13 +16,13 @@
       color: black;
       font-family: Andale Mono;
     }
-    body {
+    /* body {
       background-image: url("meli_brain.png");
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: 90% 120%;
       background-position: center top;
-    }
+    } */
     svg {
       display: block;
       margin: auto;
@@ -94,6 +95,8 @@
     //Based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html
 
     // Encapsulate the word cloud functionality
+
+    var data = [[]];
     function wordCloud(selector) {
       var fill = d3.scale.category20();
       var i = 0;
@@ -108,6 +111,29 @@
         .attr("height", 700)
         .append("g")
         .attr("transform", "translate(600,275)"); // positioning of the center
+
+      d3.text(
+        "https://raw.githubusercontent.com/heyosolim2/heyosolim2.github.io/main/instrument_data2_no_header.csv",
+        function (text) {
+          var rows = d3.csv.parseRows(text);
+          let age = 16;
+          var arr = [];
+          for (var row = 0; row < rows.length; row++) {
+            var row_array = rows[row];
+            if (row_array[0] != age) {
+              data.push(arr);
+              // console.log(146, data.length);
+              age = row_array[0];
+              arr = [];
+            }
+            arr.push(row_array[2]);
+          }
+          //  console.log(130, data.length);
+        }
+      );
+
+      // console.log(134, data.length);
+      // global_d = data;
 
       //Draw the word cloud
       function draw(words) {
@@ -161,7 +187,7 @@
         update: function (words) {
           d3.layout
             .cloud()
-            .size([1550, 800])
+            .size([1200, 500])
             .words(words)
             .padding(5)
             .spiral("archimedean")
@@ -198,11 +224,18 @@
       "mommy daddy uh-oh ball bye hi dog grrr moo baby book duck meow shoe vroom bird banana baa-baa balloon ouch car kitty cat duck quack-quack hot grandma eye nose good-night juice",
     ];
 
+    // console.log(typeof words);
     //Prepare one of the sample sentences by removing punctuation,
     // creating an array of words and computing a random size attribute.
     function getWords(i) {
-      return words[i]
-        .replace(/[!\.,:;\?]/g, "")
+      //console.log(250, global_d);
+      // console.log(250, data.length);
+      console.log("i: ", i);
+      let sliced_arr = data[i].slice(0, 400);
+      var str = sliced_arr.join(" ");
+      console.log(str);
+      return str
+        .replace(/[*/!()\.,:;\?]/g, "")
         .split(" ")
         .map(function (d) {
           return { text: d, size: 10 + Math.random() * 60 };
@@ -215,8 +248,10 @@
     function showNewWords(vis, i) {
       // i = i || 0;
       vis.update(getWords(i % words.length));
+      document.getElementById("clicks").innerHTML =
+        (global_i % words.length) + 16 + " months";
       global_i++;
-      // console.log(i, words.length);
+      console.log("test");
 
       // setTimeout(function () {
       //   showNewWords(vis, i);
@@ -224,7 +259,7 @@
     }
 
     //Create a new instance of the word cloud visualisation.
-    var global_i = 11;
+    var global_i = 1;
     var myWordCloud = wordCloud("body");
     showNewWords(myWordCloud, global_i);
     // var global_i = 0;
@@ -234,7 +269,7 @@
   <p>
     Using the vocabulary dataset from Stanford University's Wordbank research
     team, we created an interactive word cloud with vocabulary understood and
-    used by English-speaking children aged 6 months to 36 months. Users can
+    used by English-speaking children aged 16 months to 30 months. Users can
     click on the Update button to see how the range of vocabulary changes as
     kids grow older.
   </p>
