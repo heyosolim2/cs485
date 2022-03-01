@@ -135,6 +135,7 @@
           for (var row = 0; row < rows.length; row++) {
             var row_array = rows[row];
             if (row_array[0] != age) {
+              if (data.length == 13) break;
               data.push(arr);
               // console.log(146, data.length);
               age = row_array[0];
@@ -145,6 +146,8 @@
           //  console.log(130, data.length);
         }
       );
+      // console.log(data);
+      // data = data.slice(0, 13);
       console.log(data);
       // console.log(134, data.length);
       // global_d = data;
@@ -218,25 +221,30 @@
       };
     }
 
-    //Some sample data - http://en.wikiquote.org/wiki/Opening_lines
-    var words = [
-      // "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
-      // "The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon.",
-      // "When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton.",
-      // "It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.",
-      "mommy daddy", // 6
-      "mommy daddy",
-      "mommy daddy",
-      "mommy daddy uh-oh",
-      "mommy daddy uh-oh",
-      "mommy daddy uh-oh",
-      "mommy daddy uh-oh ball bye",
-      "mommy daddy uh-oh ball bye hi dog",
-      "mommy daddy uh-oh ball bye hi dog woof-woof no yum-yum",
-      "mommy daddy uh-oh ball bye hi dog grrr moo baby book",
-      "mommy daddy uh-oh ball bye hi dog grrr moo baby book",
-      "mommy daddy uh-oh ball bye hi dog grrr moo baby book duck meow shoe vroom bird banana baa-baa balloon ouch car kitty cat duck quack-quack hot grandma eye nose good-night juice",
+    var prop = [
+      0, 65, 97, 133, 176, 221, 224, 267, 302, 391, 385, 415, 367, 385, 417,
+      477,
     ];
+
+    //Some sample data - http://en.wikiquote.org/wiki/Opening_lines
+    // var words = [
+    //   // "You don't know about me without you have read a book called The Adventures of Tom Sawyer but that ain't no matter.",
+    //   // "The boy with fair hair lowered himself down the last few feet of rock and began to pick his way toward the lagoon.",
+    //   // "When Mr. Bilbo Baggins of Bag End announced that he would shortly be celebrating his eleventy-first birthday with a party of special magnificence, there was much talk and excitement in Hobbiton.",
+    //   // "It was inevitable: the scent of bitter almonds always reminded him of the fate of unrequited love.",
+    //   "mommy daddy", // 6
+    //   "mommy daddy",
+    //   "mommy daddy",
+    //   "mommy daddy uh-oh",
+    //   "mommy daddy uh-oh",
+    //   "mommy daddy uh-oh",
+    //   "mommy daddy uh-oh ball bye",
+    //   "mommy daddy uh-oh ball bye hi dog",
+    //   "mommy daddy uh-oh ball bye hi dog woof-woof no yum-yum",
+    //   "mommy daddy uh-oh ball bye hi dog grrr moo baby book",
+    //   "mommy daddy uh-oh ball bye hi dog grrr moo baby book",
+    //   "mommy daddy uh-oh ball bye hi dog grrr moo baby book duck meow shoe vroom bird banana baa-baa balloon ouch car kitty cat duck quack-quack hot grandma eye nose good-night juice",
+    // ];
 
     // console.log(typeof words);
     //Prepare one of the sample sentences by removing punctuation,
@@ -248,15 +256,16 @@
         i++;
         global_i++;
       }
-      console.log("i: ", i);
-      let sliced_arr = data[i].slice(0, 400);
+      // console.log("i: ", i);
+      // console.log("prop[i]: ", prop[i - 1]);
+      let sliced_arr = data[i].slice(0, prop[i]);
       var str = sliced_arr.join(" ");
-      console.log(str);
+      // console.log(str);
       return str
         .replace(/[*/!()\.,:;\?]/g, "")
         .split(" ")
         .map(function (d) {
-          return { text: d, size: 10 + Math.random() * 60 };
+          return { text: d, size: 20 };
         });
     }
 
@@ -265,9 +274,9 @@
     // user input or some other source.
     function showNewWords(vis, i) {
       // i = i || 0;
-      vis.update(getWords(i % words.length));
+      vis.update(getWords(i % data.length));
       document.getElementById("clicks").innerHTML =
-        (global_i % words.length) + 15 + " months";
+        (global_i % data.length) + 15 + " months";
       global_i++;
 
       // setTimeout(function () {
@@ -276,7 +285,7 @@
     }
 
     //Create a new instance of the word cloud visualisation.
-    var global_i = 1;
+    var global_i = 0;
     var myWordCloud = wordCloud("body");
     showNewWords(myWordCloud, global_i);
     // var global_i = 0;
@@ -286,7 +295,7 @@
   <p>
     Using the vocabulary dataset from Stanford University's Wordbank research
     team, we created an interactive word cloud with the vocabulary understood
-    and used by English-speaking children aged 16 months to 26 months. Users can
+    and used by English-speaking children aged 16 months to 29 months. Users can
     click on the Click Me! button to see how the range of vocabulary changes as
     kids grow older. We used and modified Jason Davies' word cloud package on
     D3.
@@ -312,9 +321,9 @@
   <div id="graph2">
     <iframe
       style="border: 1px solid rgba(0, 0, 0, 0.1)"
-      width="1200"
-      height="1200"
-      src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FpIRAKM6c16FUyknZEecrIU%2FBirth-Order%3Fnode-id%3D4%253A8%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A8"
+      width="800"
+      height="450"
+      src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FKQFWktbQZ9STL8pk3HZtI3%2FImpact-of-Birth-Order-on-Children's-Vocabulary-Size-by-Age-(V2)%3Fnode-id%3D4%253A8%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A8"
       allowfullscreen
     ></iframe>
   </div>
